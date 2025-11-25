@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Create Account</h2>
+
+<form method="post">
+    <label>Username</label>
+    <input type="text" name="Username" class="form-control" />
+
+    <label>Password</label>
+    <input type="password" name="Password" class="form-control" />
+
+    <label>Role</label>
+    <select name="Role" class="form-control">
+        <option>Admin</option>
+        <option>Clinician</option>
+        <option>Patient</option>
+    </select>
+
+    <button class="btn btn-primary mt-3">Register</button>
+</form>
