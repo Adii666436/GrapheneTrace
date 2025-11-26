@@ -1,0 +1,11 @@
+﻿<h2>Upload Pressure CSV</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="csvfile" class="form-control" />
+    <button class="btn btn-primary mt-3">Upload</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}

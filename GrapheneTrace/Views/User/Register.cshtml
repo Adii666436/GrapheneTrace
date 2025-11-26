@@ -5,18 +5,20 @@
 <h2>Create Account</h2>
 
 <form method="post">
+
     <label>Username</label>
-    <input type="text" name="Username" class="form-control" />
+    <input type="text" name="Username" class="form-control mb-2" required />
 
     <label>Password</label>
-    <input type="password" name="Password" class="form-control" />
+    <input type="password" name="Password" class="form-control mb-2" required />
 
     <label>Role</label>
-    <select name="Role" class="form-control">
-        <option>Admin</option>
-        <option>Clinician</option>
-        <option>Patient</option>
+    <select name="Role" class="form-control mb-3" required>
+        <option value="Admin">Admin</option>
+        <option value="Clinician">Clinician</option>
+        <option value="Patient">Patient</option>
     </select>
 
-    <button class="btn btn-primary mt-3">Register</button>
+    <button class="btn btn-primary">Register</button>
+
 </form>

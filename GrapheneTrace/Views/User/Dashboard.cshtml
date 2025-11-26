@@ -3,7 +3,79 @@
 }
 
 <h2>Welcome, @ViewBag.Username!</h2>
-
 <p>Your role: @ViewBag.Role</p>
 
+<br>
 <a href="/User/Login">Logout</a>
+<br>
+<br>
+
+@if (ViewBag.Role == "Admin")
+{
+    <h3>Admin Summary</h3>
+    <p>Total Patients: @ViewBag.PatientCount</p>
+    <p>Total Clinicians: @ViewBag.ClinicianCount</p>
+    <p>Total CSV Uploads: @ViewBag.UploadCount</p>
+
+    <br>
+    <a href="/Patient/Add">Add Patient</a>
+    <br>
+    <a href="/Clinician/Upload">Upload CSV</a>
+    <br>
+    <a href="/Pressure/ShowMatrix">Show Matrix</a>
+    <br>
+}
+
+@if (ViewBag.Role == "Clinician")
+{
+    <h3>Clinician Summary</h3>
+    <p>Patients: @ViewBag.PatientCount</p>
+    <p>Alerts: @ViewBag.AlertCount</p>
+    <p>Reports: @ViewBag.ReportCount</p>
+
+    <h4>Recent Uploads</h4>
+
+    
+
+   @if (ViewBag.RecentUploads ==null || ViewBag.RecentUploads.Count ==0)
+    {
+        <p>No uploads yet.</p>
+    }
+    else
+    {
+        <table border="1" cellpadding="6">
+            <tr>
+                <th>Date</th>
+                <th>File</th>
+                <th>Rows</th>
+                <th>Cols</th>
+            </tr>
+
+            @foreach (var item in ViewBag.Recentuploads)
+            {
+                <tr>
+                    <td>@item.Date</td>
+                    <td>@item.FileName</td>
+                    <td>@item.Rows</td>
+                    <td>@item.Cols</td>
+                </tr>
+            }
+        </table>
+    }
+
+    <br />
+    <a href="/Clinician/Upload">Upload CSV</a>
+    <br />
+    <a href="/Pressure/ShowMatrix">Show Matrix</a>
+    <br />
+}
+
+@if (ViewBag.Role == "Patient")
+{
+    <h3>Your Latest Upload</h3>
+    <p>Date: @ViewBag.LastUploadDate</p>
+
+    <br>
+    <a href="/Pressure/ShowMatrix">View Pressure Matrix</a>
+    <br>
+}

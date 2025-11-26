@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GrapheneTrace.Models;
 using System.Linq;
+using GrapheneTrace.Controllers;   // <-- Needed so Dashboard can access ClinicianController.Uploads
 
 namespace GrapheneTrace.Controllers
 {
     public class UserController : Controller
     {
-        // Temporary in-memory user list (no database)
         public static List<User> Users = new List<User>();
 
-        // GET: /User/Login
+        // LOGIN PAGE
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: /User/Login
+        // LOGIN POST
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
@@ -27,17 +27,17 @@ namespace GrapheneTrace.Controllers
                 return View();
             }
 
-            // Send the username to Dashboard
-            return RedirectToAction("Dashboard", new { username = user.Username });
+            // Send Username + Role
+            return RedirectToAction("Dashboard", new { username = user.Username, role = user.Role });
         }
 
-        // GET: /User/Register
+        // REGISTER PAGE
         public IActionResult Register()
         {
             return View();
         }
 
-        // POST: /User/Register
+        // REGISTER POST
         [HttpPost]
         public IActionResult Register(User user)
         {
@@ -45,17 +45,28 @@ namespace GrapheneTrace.Controllers
             return RedirectToAction("Login");
         }
 
-        // GET: /User/Dashboard
-        public IActionResult Dashboard(string username)
+        // DASHBOARD
+        public IActionResult Dashboard(string username, string role)
         {
-            var user = Users.FirstOrDefault(u => u.Username == username);
+            ViewBag.Username = username;
+            ViewBag.Role = role;
 
-            if (user == null)
-                return RedirectToAction("Login");
+            // Admin summary
+            ViewBag.PatientCount = PatientController.Patients.Count;
+            ViewBag.ClinicianCount = UserController.Users.Count(u => u.Role == "Clinician");
+            ViewBag.UploadCount = ClinicianController.Uploads.Count;
 
-            ViewBag.Username = user.Username;
-            ViewBag.Role = user.Role;
+            // Clinician summary
+            ViewBag.AlertCount = 0;
+            ViewBag.ReportCount = 0;
 
+            // Clinician recent uploads
+            ViewBag.RecentUploads = ClinicianController.Uploads.TakeLast(5).ToList();
+
+
+            // Patient summary
+            if (ClinicianController.Uploads.Count > 0)
+                ViewBag.LastUploadDate = ClinicianController.Uploads.Last().Date;
 
             return View();
         }

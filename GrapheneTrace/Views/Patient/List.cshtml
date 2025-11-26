@@ -1,0 +1,18 @@
+﻿@model List<GrapheneTrace.Models.Patient>
+
+<h2>Patients List</h2>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Name</td>
+            <td>@p.Age</td>
+        </tr>
+    }
+</table>

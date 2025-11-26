@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Clinician Dashboard";
+}
+
+<h1 style="font-weight:700">Clinician Dashboard</h1>
+
+<div style="display:flex; gap:20px; margin-top:20px;">
+    <div style="padding:20px; background:#eee; border-radius:10px; width:150px;">
+        <h3>Patients</h3>
+        <p style="font-size:24px; font-weight:bold;">@ViewBag.PatientCount</p>
+    </div>
+
+    <div style="padding:20px; background:#eee; border-radius:10px; width:150px;">
+        <h3>Alerts</h3>
+        <p style="font-size:24px; font-weight:bold;">@ViewBag.AlertCount</p>
+    </div>
+
+    <div style="padding:20px; background:#eee; border-radius:10px; width:150px;">
+        <h3>CSV Files</h3>
+        <p style="font-size:24px; font-weight:bold;">@ViewBag.UploadCount</p>
+    </div>
+</div>
+
+<h2 style="margin-top:40px;">Recent Uploads</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Patient</th>
+        <th>Date</th>
+        <th>File</th>
+    </tr>
+
+    @foreach (var item in ViewBag.RecentUploads)
+    {
+        <tr>
+            <td>@item.Patient</td>
+            <td>@item.Date</td>
+            <td>@item.File</td>
+        </tr>
+    }
+</table>
