@@ -5,7 +5,11 @@ namespace GrapheneTrace.Controllers
 {
     public class PatientController : Controller
 {
-    public static List<Patient> Patients = new List<Patient>();
+        
+        public static List<Patient> Patients = new List<Patient>();
+
+
+        
 
     public IActionResult Add()
     {

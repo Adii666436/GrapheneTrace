@@ -49,6 +49,7 @@
                 <th>File</th>
                 <th>Rows</th>
                 <th>Cols</th>
+                <th>Alert</th>
             </tr>
 
             @foreach (var item in ViewBag.Recentuploads)
@@ -58,6 +59,7 @@
                     <td>@item.FileName</td>
                     <td>@item.Rows</td>
                     <td>@item.Cols</td>
+                    <td>@(item.Alert ? "yes":"Safe")</td>
                 </tr>
             }
         </table>

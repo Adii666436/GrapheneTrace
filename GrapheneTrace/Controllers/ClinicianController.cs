@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GrapheneTrace.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.IO;
 
 namespace GrapheneTrace.Controllers
 {
     public class ClinicianController : Controller
     {
-        // Store upload history (optional – for dashboard)
+        // Store upload history
         public static List<dynamic> Uploads = new List<dynamic>();
 
         public IActionResult Upload()
@@ -34,6 +35,9 @@ namespace GrapheneTrace.Controllers
             // Create matrix with correct size
             int[,] matrix = new int[rowCount, colCount];
 
+            PressureController.Matrix = matrix;
+
+
             // Safe parsing
             for (int i = 0; i < rowCount; i++)
             {
@@ -45,8 +49,49 @@ namespace GrapheneTrace.Controllers
                 }
             }
 
-            // Save matrix globally
-            PressureController.Matrix = matrix;
+
+            // ---- Compute Metrics ----
+            int peakPressure = matrix.Cast<int>().Max();
+
+            int threshold = 40;
+            int totalPixels = rowCount * colCount;
+            int activePixels = matrix.Cast<int>().Count(v => v > threshold);
+            double contactAreaPercent = Math.Round((activePixels * 100.0) / totalPixels, 2);
+
+            // Average Pressure
+            double averagePressure = Math.Round(matrix.Cast<int>().Average(), 2);
+
+            // Save metrics to PressureController
+            PressureController.Records.Add(new PressureRecord
+            {
+                PeakPressure = peakPressure,
+                ContactAreaPercent = contactAreaPercent,
+                AveragePressure = averagePressure,
+                Date = DateTime.Now.ToString("dd MMM yyyy HH:mm"),
+                Matrix = matrix
+            });
+
+
+           
+            // Alert cjeck
+
+            int alertThreshold = 40;
+            bool alert = false;
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    if (matrix[i, j] > alertThreshold)
+                    {
+                        alert = true;
+                        break;
+                    }
+                }
+                if (alert) break;
+            }
+
+
 
             // Save upload record
             Uploads.Add(new
@@ -54,7 +99,8 @@ namespace GrapheneTrace.Controllers
                 FileName = csvFile.FileName,
                 Date = DateTime.Now.ToString("dd MMM yyyy HH:mm"),
                 Rows = rowCount,
-                Cols = colCount
+                Cols = colCount,
+                Alert = alert
             });
 
             return RedirectToAction("ShowMatrix", "Pressure");
