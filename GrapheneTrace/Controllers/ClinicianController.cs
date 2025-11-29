@@ -68,14 +68,14 @@ namespace GrapheneTrace.Controllers
                 ContactAreaPercent = contactAreaPercent,
                 AveragePressure = averagePressure,
                 Date = DateTime.Now.ToString("dd MMM yyyy HH:mm"),
-                Matrix = matrix
+
             });
 
 
-           
+
             // Alert cjeck
 
-            int alertThreshold = 40;
+            int alertThreshold = 25;
             bool alert = false;
 
             for (int i = 0; i < rowCount; i++)
@@ -100,10 +100,26 @@ namespace GrapheneTrace.Controllers
                 Date = DateTime.Now.ToString("dd MMM yyyy HH:mm"),
                 Rows = rowCount,
                 Cols = colCount,
-                Alert = alert
+                Alert = alert,
+
             });
 
             return RedirectToAction("ShowMatrix", "Pressure");
         }
+
+
+            // ---- Clinician Dashboard ----
+        public IActionResult Dashboard()
+        {
+            ViewBag.RecentUploads = Uploads.TakeLast(5).ToList();
+
+            ViewBag.AlertCount = PressureController.Records.Count(r => r.Alert == true);
+            ViewBag.ReportCount = PressureController.Records.Count();
+            ViewBag.PatientCount = 0;
+
+            return View();
+        }
+
+        
     }
 }

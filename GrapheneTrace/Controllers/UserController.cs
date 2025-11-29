@@ -57,7 +57,7 @@ namespace GrapheneTrace.Controllers
             ViewBag.UploadCount = ClinicianController.Uploads.Count;
 
             // Clinician summary
-            ViewBag.AlertCount = 0;
+            ViewBag.AlertCount = ClinicianController.Uploads.Count(u => u.Alert == true);
             ViewBag.ReportCount = 0;
 
             // Clinician recent uploads

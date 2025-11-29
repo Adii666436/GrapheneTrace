@@ -1,0 +1,35 @@
+﻿@using GrapheneTrace.Models
+@{
+    ViewBag.Title = "Pressure Reports";
+    var records = ViewBag.Records as List<PressureRecord> ?? new List<PressureRecord>();
+}
+
+<h2>Pressure Reports</h2>
+
+@if (!records.Any())
+{
+    <p>No reports yet. Upload a CSV first.</p>
+}
+else
+{
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Date</th>
+            <th>Peak Pressure</th>
+            <th>Contact Area %</th>
+            <th>Average Pressure</th>
+            <th>Alert</th>
+        </tr>
+
+        @foreach (var r in records)
+        {
+            <tr>
+                <td>@r.Date</td>
+                <td>@r.PeakPressure</td>
+                <td>@Math.Round(r.ContactAreaPercent, 1)</td>
+                <td>@Math.Round(r.AveragePressure, 1)</td>
+                <td>@(r.Alert ? "YES" : "No")</td>
+            </tr>
+        }
+    </table>
+}
